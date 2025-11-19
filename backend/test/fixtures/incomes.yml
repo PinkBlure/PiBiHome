@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  amount: 9.99
+  description: MyText
+  income_source: one
+  income_date: 2025-11-19
+
+two:
+  amount: 9.99
+  description: MyText
+  income_source: two
+  income_date: 2025-11-19
