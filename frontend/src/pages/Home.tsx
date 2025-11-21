@@ -1,7 +1,6 @@
 export const Home = () => {
   return (
     <div className="min-h-full">
-      {/* Hero Section */}
       <div className="bg-gradient-to-br from-pink-400/10 via-purple-400/10 to-blue-400/10 rounded-3xl p-8 mb-8 border border-white/50">
         <div className="text-center max-w-4xl mx-auto">
           <div className="w-32 h-32 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
@@ -24,7 +23,6 @@ export const Home = () => {
         </div>
       </div>
 
-      {/* Features Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-pink-100 shadow-sm hover:shadow-md transition-shadow duration-300">
           <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-500 rounded-xl flex items-center justify-center mb-4">
@@ -57,7 +55,6 @@ export const Home = () => {
         </div>
       </div>
 
-      {/* Quick Stats */}
       <div className="bg-gradient-to-r from-pink-500 to-purple-500 rounded-2xl p-6 text-white">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div>
@@ -79,7 +76,6 @@ export const Home = () => {
         </div>
       </div>
 
-      {/* CTA Section */}
       <div className="text-center mt-12">
         <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 border border-pink-200 shadow-sm">
           <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>

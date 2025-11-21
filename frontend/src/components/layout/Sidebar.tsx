@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { sidebarItems } from '../config/sidebarItems';
+import { sidebarItems } from '../../config/sidebarItems';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -20,7 +20,7 @@ export const Sidebar = ({ isOpen, onClose, setSidebarOpen }: SidebarProps) => {
         <button
           type="button"
           aria-label="Cerrar menú"
-          className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40 sm:hidden cursor-default"
+          className="fixed inset-0 bg-black/60 z-40 sm:hidden cursor-default"
           onClick={onClose}
         />
       )}

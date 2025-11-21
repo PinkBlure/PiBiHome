@@ -1,22 +1,21 @@
-# backend/app/controllers/categories_controller.rb
 class CategoriesController < ApplicationController
-  def index
-    @categories = Category.all.includes(:category_type).order('category_types.name, categories.name')
-    render json: @categories, include: :category_type
-  end
-
-  def create
-    @category = Category.new(category_params)
-    if @category.save
-      render json: @category, include: :category_type, status: :created
-    else
-      render json: @category.errors, status: :unprocessable_entity
-    end
-  end
+  include CrudActions
 
   private
 
-  def category_params
-    params.require(:category).permit(:name, :description, :category_type_id)
+  def model
+    Category
+  end
+
+  def model_params
+    params.require(:category).permit(:name, :category_type_id, :color, :icon, :description)
+  end
+
+  def includes_resources
+    :category_type
+  end
+
+  def order_param
+    :name
   end
 end
