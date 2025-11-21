@@ -1,23 +1,23 @@
-import type { CategoryType, Category  } from '../../../services/categoryService';
+import type { CategoryType, Category } from '../../../services/categoryService';
 import { CategoryTypeSection } from './CategoryTypeSection';
 
-interface CategoryTypeWithCategories {
-  type: CategoryType;
-  categories: Category[];
-}
-
 interface CategoryTypeListProps {
-  categoriesByType: CategoryTypeWithCategories[];
+  categoriesByType: Array<{
+    type: CategoryType;
+    categories: Category[];
+  }>;
   onDeleteCategoryType: (id: number) => void;
   onEditCategoryType: (id: number) => void;
   onDeleteCategory: (id: number) => void;
+  onEditCategory: (id: number) => void;
 }
 
 export const CategoryTypeList = ({
   categoriesByType,
   onDeleteCategoryType,
   onEditCategoryType,
-  onDeleteCategory
+  onDeleteCategory,
+  onEditCategory
 }: CategoryTypeListProps) => {
   return (
     <div className="space-y-8">
@@ -29,6 +29,7 @@ export const CategoryTypeList = ({
           onDeleteCategoryType={onDeleteCategoryType}
           onEditCategoryType={onEditCategoryType}
           onDeleteCategory={onDeleteCategory}
+          onEditCategory={onEditCategory}
         />
       ))}
     </div>

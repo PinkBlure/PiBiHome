@@ -34,7 +34,7 @@ export const Sidebar = ({ isOpen, onClose, setSidebarOpen }: SidebarProps) => {
           bg-gradient-to-b from-white to-pink-50
           transform transition-all duration-300 ease-out
           z-50
-          ${isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full sm:translate-x-0'}
+          ${isOpen ? 'translate-x-0' : 'translate-x-full sm:translate-x-0'}
           flex flex-col
           border-r border-pink-100
           backdrop-blur-lg bg-white/95
@@ -68,7 +68,7 @@ export const Sidebar = ({ isOpen, onClose, setSidebarOpen }: SidebarProps) => {
               <Link
                 key={item.label}
                 to={item.href || '#'}
-                className="flex items-center px-4 py-3 text-gray-700 hover:bg-white hover:shadow-md rounded-xl transition-all duration-200 group border border-transparent hover:border-pink-200"
+                className="flex items-center px-4 py-3 text-gray-700 hover:bg-white rounded-xl transition-all duration-200 group border border-transparent hover:border-pink-200"
                 onClick={handleLinkClick}
               >
                 <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-500 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">

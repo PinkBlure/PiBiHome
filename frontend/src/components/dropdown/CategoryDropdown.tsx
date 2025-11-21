@@ -3,14 +3,14 @@ import { Dropdown } from '../dropdown/Dropdown';
 interface CategoryDropdownProps {
   onAddCategory: () => void;
   onAddCategoryType: () => void;
-  onManageTags?: () => void;
+  onCreateIncomeSource?: () => void;
   className?: string;
 }
 
 export const CategoryDropdown = ({
   onAddCategory,
   onAddCategoryType,
-  onManageTags,
+  onCreateIncomeSource,
   className = ''
 }: CategoryDropdownProps) => {
   const dropdownItems = [
@@ -30,18 +30,18 @@ export const CategoryDropdown = ({
       iconColor: 'text-blue-500',
       description: 'Crear nueva categoría de gasto'
     },
-    ...(onManageTags ? [{
-      id: 'manage-tags',
-      label: 'Gestionar etiquetas',
-      onClick: onManageTags,
-      icon: 'fas fa-tags',
+    ...(onCreateIncomeSource ? [{
+      id: 'create-income-source',
+      label: 'Nuevo ingreso',
+      onClick: onCreateIncomeSource,
+      icon: 'fas fa-money-bill-wave',
       iconColor: 'text-green-500',
-      description: 'Administrar etiquetas existentes'
+      description: 'Crear nueva fuente de ingreso'
     }] : [])
   ];
 
   const triggerContent = (
-    <div className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2">
+    <div className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-2">
       <i className="fas fa-plus"></i>
       <span>Agregar</span>
       <i className="fas fa-chevron-down text-sm ml-1"></i>

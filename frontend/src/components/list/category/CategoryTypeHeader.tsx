@@ -1,4 +1,5 @@
 import type { CategoryType } from '../../../services/categoryService';
+import { ButtonAction } from '../../button/ButtonAction';
 
 interface CategoryTypeHeaderProps {
   type: CategoryType;
@@ -14,7 +15,7 @@ export const CategoryTypeHeader = ({
   onEdit
 }: CategoryTypeHeaderProps) => {
   return (
-    <div className="flex items-center justify-between ">
+    <div className="flex items-center justify-between">
       <div className="flex items-center gap-4 flex-1 min-w-0">
         <div className="w-4 h-4 bg-pink-500 rounded-full flex-shrink-0"></div>
         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -28,21 +29,21 @@ export const CategoryTypeHeader = ({
       </div>
 
       <div className="flex items-center gap-2 flex-shrink-0 ml-4">
-        <button
+        <ButtonAction
           onClick={onEdit}
-          className="text-pink-500 hover:text-white hover:bg-pink-500 transition-all duration-200 p-3 rounded-xl border border-pink-200 hover:border-pink-500"
           title="Editar tipo de categoría"
-        >
-          <i className="fas fa-edit"></i>
-        </button>
+          icon="fas fa-edit"
+          variant="edit"
+          className="p-3"
+        />
 
-        <button
+        <ButtonAction
           onClick={onDelete}
-          className="text-pink-500 hover:text-white hover:bg-pink-500 transition-all duration-200 p-3 rounded-xl border border-pink-200 hover:border-pink-500"
           title="Eliminar tipo de categoría"
-        >
-          <i className="fas fa-trash"></i>
-        </button>
+          icon="fas fa-trash"
+          variant="delete"
+          className="p-3"
+        />
       </div>
     </div>
   );

@@ -1,24 +1,36 @@
 import { useState, useEffect } from 'react';
 import type { Category, CategoryType } from '../services/categoryService';
+import type { IncomeSource } from '../services/incomeSourceService';
 import { categoryService } from '../services/categoryService';
+import { incomeSourceService } from '../services/incomeSourceService';
 import { CategoryDropdown } from '../components/dropdown/CategoryDropdown';
 import { Modal } from '../components/modal/Modal';
 import { CreateCategoryTypeModal } from '../components/modal/CreateCategoryTypeModal';
 import { CreateCategoryModal } from '../components/modal/CreateCategoryModal';
+import { CreateIncomeSourceModal } from '../components/modal/CreateIncomeSourceModal';
 import { CategoryTypeList } from '../components/list/category/CategoryTypeList';
+import { IncomeSourceList } from '../components/list/income/IncomeSourceList';
 
 export const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryTypes, setCategoryTypes] = useState<CategoryType[]>([]);
+  const [incomeSources, setIncomeSources] = useState<IncomeSource[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [isAdding, setIsAdding] = useState(false);
   const [isAddingType, setIsAddingType] = useState(false);
   const [isEditingType, setIsEditingType] = useState(false);
+  const [isEditingCategory, setIsEditingCategory] = useState(false);
+  const [isCreatingIncomeSource, setIsCreatingIncomeSource] = useState(false);
+  const [isEditingIncomeSource, setIsEditingIncomeSource] = useState(false);
+
   const [editingType, setEditingType] = useState<CategoryType | null>(null);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [editingIncomeSource, setEditingIncomeSource] = useState<IncomeSource | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittingType, setIsSubmittingType] = useState(false);
+  const [isSubmittingIncomeSource, setIsSubmittingIncomeSource] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -34,6 +46,9 @@ export const Categories = () => {
 
       const categoriesData = await categoryService.getAll();
       setCategories(categoriesData);
+
+      const incomeSourcesData = await incomeSourceService.getAll();
+      setIncomeSources(incomeSourcesData);
 
     } catch (err) {
       setError('Error al cargar los datos');
@@ -69,6 +84,41 @@ export const Categories = () => {
     } catch (err) {
       setError('Error al crear la categoría');
       console.error('Error creating category:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleEditCategory = async (categoryData: {
+    name: string;
+    category_type_id: number;
+    color: string;
+    icon: string;
+    description: string;
+  }) => {
+    if (!categoryData.name.trim() || !categoryData.category_type_id || !editingCategory) return;
+
+    try {
+      setIsSubmitting(true);
+      setError(null);
+
+      const updatedCategory = await categoryService.update(editingCategory.id, {
+        name: categoryData.name.trim(),
+        category_type_id: categoryData.category_type_id,
+        color: categoryData.color,
+        icon: categoryData.icon,
+        description: categoryData.description.trim() || undefined
+      });
+
+      setCategories(prev => prev.map(cat =>
+        cat.id === editingCategory.id ? updatedCategory : cat
+      ));
+
+      setEditingCategory(null);
+      setIsEditingCategory(false);
+    } catch (err) {
+      setError('Error al actualizar la categoría');
+      console.error('Error updating category:', err);
     } finally {
       setIsSubmitting(false);
     }
@@ -115,11 +165,68 @@ export const Categories = () => {
     }
   };
 
+  const handleAddIncomeSource = async (incomeSourceData: { name: string; description: string }) => {
+    if (!incomeSourceData.name.trim()) return;
+
+    try {
+      setIsSubmittingIncomeSource(true);
+      setError(null);
+
+      const createdIncomeSource = await incomeSourceService.create(incomeSourceData);
+      setIncomeSources(prev => [...prev, createdIncomeSource]);
+
+      setIsCreatingIncomeSource(false);
+    } catch (err) {
+      setError('Error al crear la fuente de ingreso');
+      console.error('Error creating income source:', err);
+    } finally {
+      setIsSubmittingIncomeSource(false);
+    }
+  };
+
+  const handleEditIncomeSource = async (incomeSourceData: { name: string; description: string }) => {
+    if (!incomeSourceData.name.trim() || !editingIncomeSource) return;
+
+    try {
+      setIsSubmittingIncomeSource(true);
+      setError(null);
+
+      const updatedIncomeSource = await incomeSourceService.update(editingIncomeSource.id, incomeSourceData);
+      setIncomeSources(prev => prev.map(source =>
+        source.id === editingIncomeSource.id ? updatedIncomeSource : source
+      ));
+
+      setEditingIncomeSource(null);
+      setIsEditingIncomeSource(false);
+    } catch (err) {
+      setError('Error al actualizar la fuente de ingreso');
+      console.error('Error updating income source:', err);
+    } finally {
+      setIsSubmittingIncomeSource(false);
+    }
+  };
+
   const handleStartEditCategoryType = (id: number) => {
     const typeToEdit = categoryTypes.find(type => type.id === id);
     if (typeToEdit) {
       setEditingType(typeToEdit);
       setIsEditingType(true);
+    }
+  };
+
+  const handleStartEditCategory = (id: number) => {
+    const categoryToEdit = categories.find(cat => cat.id === id);
+    if (categoryToEdit) {
+      setEditingCategory(categoryToEdit);
+      setIsEditingCategory(true);
+    }
+  };
+
+  const handleStartEditIncomeSource = (id: number) => {
+    const sourceToEdit = incomeSources.find(source => source.id === id);
+    if (sourceToEdit) {
+      setEditingIncomeSource(sourceToEdit);
+      setIsEditingIncomeSource(true);
     }
   };
 
@@ -146,8 +253,15 @@ export const Categories = () => {
     }
   };
 
-  const handleManageTags = () => {
-    console.log('Gestionar etiquetas');
+  const handleDeleteIncomeSource = async (id: number) => {
+    try {
+      setError(null);
+      await incomeSourceService.delete(id);
+      setIncomeSources(prev => prev.filter(source => source.id !== id));
+    } catch (err) {
+      setError('Error al eliminar la fuente de ingreso');
+      console.error('Error deleting income source:', err);
+    }
   };
 
   const handleAddCategoryTypeFromCategory = () => {
@@ -183,7 +297,7 @@ export const Categories = () => {
           <CategoryDropdown
             onAddCategory={() => setIsAdding(true)}
             onAddCategoryType={() => setIsAddingType(true)}
-            onManageTags={handleManageTags}
+            onCreateIncomeSource={() => setIsCreatingIncomeSource(true)}
           />
         </div>
       </div>
@@ -193,6 +307,43 @@ export const Categories = () => {
           {error}
         </div>
       )}
+
+      <Modal
+        isOpen={isCreatingIncomeSource}
+        onClose={() => setIsCreatingIncomeSource(false)}
+        title="Crear fuente de ingreso"
+        size="md"
+      >
+        <CreateIncomeSourceModal
+          onSubmit={handleAddIncomeSource}
+          onClose={() => setIsCreatingIncomeSource(false)}
+          isSubmitting={isSubmittingIncomeSource}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isEditingIncomeSource}
+        onClose={() => {
+          setIsEditingIncomeSource(false);
+          setEditingIncomeSource(null);
+        }}
+        title="Editar fuente de ingreso"
+        size="md"
+      >
+        <CreateIncomeSourceModal
+          key={editingIncomeSource?.id || 'create'}
+          onSubmit={handleEditIncomeSource}
+          onClose={() => {
+            setIsEditingIncomeSource(false);
+            setEditingIncomeSource(null);
+          }}
+          isSubmitting={isSubmittingIncomeSource}
+          initialData={editingIncomeSource ? {
+            name: editingIncomeSource.name,
+            description: editingIncomeSource.description || ''
+          } : undefined}
+        />
+      </Modal>
 
       <Modal
         isOpen={isAdding}
@@ -206,6 +357,35 @@ export const Categories = () => {
           onAddCategoryType={handleAddCategoryTypeFromCategory}
           isSubmitting={isSubmitting}
           categoryTypes={categoryTypes}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isEditingCategory}
+        onClose={() => {
+          setIsEditingCategory(false);
+          setEditingCategory(null);
+        }}
+        title="Editar categoría"
+        size="md"
+      >
+        <CreateCategoryModal
+          key={editingCategory?.id || 'create'}
+          onSubmit={handleEditCategory}
+          onClose={() => {
+            setIsEditingCategory(false);
+            setEditingCategory(null);
+          }}
+          onAddCategoryType={handleAddCategoryTypeFromCategory}
+          isSubmitting={isSubmitting}
+          categoryTypes={categoryTypes}
+          initialData={editingCategory ? {
+            name: editingCategory.name,
+            category_type_id: editingCategory.category_type_id,
+            color: editingCategory.color,
+            icon: editingCategory.icon,
+            description: editingCategory.description || ''
+          } : undefined}
         />
       </Modal>
 
@@ -246,6 +426,16 @@ export const Categories = () => {
         />
       </Modal>
 
+      {incomeSources.length > 0 && (
+        <div className="mb-8">
+          <IncomeSourceList
+            incomeSources={incomeSources}
+            onDeleteIncomeSource={handleDeleteIncomeSource}
+            onEditIncomeSource={handleStartEditIncomeSource}
+          />
+        </div>
+      )}
+
       {categories.length === 0 && !loading && (
         <div className="text-center py-12">
           <div className="text-6xl mb-4">
@@ -261,7 +451,7 @@ export const Categories = () => {
             <CategoryDropdown
               onAddCategory={() => setIsAdding(true)}
               onAddCategoryType={() => setIsAddingType(true)}
-              onManageTags={handleManageTags}
+              onCreateIncomeSource={() => setIsCreatingIncomeSource(true)}
             />
           </div>
         </div>
@@ -272,6 +462,7 @@ export const Categories = () => {
         onDeleteCategoryType={handleDeleteCategoryType}
         onEditCategoryType={handleStartEditCategoryType}
         onDeleteCategory={handleDeleteCategory}
+        onEditCategory={handleStartEditCategory}
       />
     </div>
   );

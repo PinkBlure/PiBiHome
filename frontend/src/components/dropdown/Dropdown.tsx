@@ -83,7 +83,7 @@ export const Dropdown = ({
 
       {isOpen && (
         <div
-          className={`absolute ${positionClasses[position]} top-full mt-2 w-56 bg-white rounded-lg border border-gray-200 z-50 shadow-lg`}
+          className={`absolute ${positionClasses[position]} top-full mt-2 w-56 bg-white rounded-lg border border-gray-200 z-50`}
           role="menu"
         >
           {items.map((item) => (

@@ -1,11 +1,13 @@
 import type { Category } from '../../../services/categoryService';
+import { ButtonAction } from '../../button/ButtonAction';
 
 interface CategoryCardProps {
   category: Category;
   onDelete: () => void;
+  onEdit: () => void;
 }
 
-export const CategoryCard = ({ category, onDelete }: CategoryCardProps) => {
+export const CategoryCard = ({ category, onDelete, onEdit }: CategoryCardProps) => {
   const getIconContent = () => {
     if (!category.icon) {
       return <i className="fas fa-folder"></i>;
@@ -33,13 +35,21 @@ export const CategoryCard = ({ category, onDelete }: CategoryCardProps) => {
           </div>
         </div>
 
-        <button
-          onClick={onDelete}
-          className="opacity-0 group-hover:opacity-100 text-pink-400 border border-pink-200 hover:text-white hover:bg-pink-400 transition-all duration-300 p-2 rounded-xl ml-2 flex-shrink-0"
-          title="Eliminar categoría"
-        >
-          <i className="fas fa-trash text-sm"></i>
-        </button>
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300 ml-2">
+          <ButtonAction
+            onClick={onEdit}
+            title="Editar categoría"
+            icon="fas fa-edit"
+            variant="edit"
+          />
+
+          <ButtonAction
+            onClick={onDelete}
+            title="Eliminar categoría"
+            icon="fas fa-trash"
+            variant="delete"
+          />
+        </div>
       </div>
     </div>
   );
