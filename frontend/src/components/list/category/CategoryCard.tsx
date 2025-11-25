@@ -28,9 +28,13 @@ export const CategoryCard = ({ category, onDelete, onEdit }: CategoryCardProps) 
             {getIconContent()}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-gray-800 text-lg truncate">{category.name || 'Sin nombre'}</h3>
+            <h3 className="font-bold text-gray-800 text-lg break-words whitespace-normal">
+              {category.name || 'Sin nombre'}
+            </h3>
             {category.description && (
-              <p className="text-gray-500 text-sm mt-1 line-clamp-2">{category.description}</p>
+              <p className="text-gray-500 text-sm mt-1 break-words whitespace-normal">
+                {category.description}
+              </p>
             )}
           </div>
         </div>

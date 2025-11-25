@@ -5,6 +5,7 @@ import './index.css'
 import { App } from './App.tsx'
 import { Home } from './pages/Home'
 import { Categories } from './pages/Categories'
+import { Balance } from './pages/Balance'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -13,6 +14,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
           <Route path="categories" element={<Categories />} />
+          <Route path="balance" element={<Balance />} />
         </Route>
       </Routes>
     </Router>

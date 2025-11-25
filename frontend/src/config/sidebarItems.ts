@@ -6,8 +6,6 @@ export interface SidebarItem {
 
 export const sidebarItems: SidebarItem[] = [
   { icon: 'home', label: 'Inicio', href: '/' },
-  // { icon: 'chart-pie', label: 'Dashboard', href: '/dashboard' },
-  // { icon: 'wallet', label: 'Finanzas', href: '/finances' },
+  { icon: 'wallet', label: 'Balance', href: '/balance' },
   { icon: 'tags', label: 'Categorías', href: '/categories' },
-  // { icon: 'cog', label: 'Configuración', href: '/settings' }
 ];

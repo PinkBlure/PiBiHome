@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_20_234837) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_25_202747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -38,7 +38,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_20_234837) do
     t.decimal "amount", precision: 10, scale: 2, null: false
     t.text "description", null: false
     t.bigint "category_id", null: false
-    t.date "expense_date", null: false
+    t.datetime "expense_date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_expenses_on_category_id"
@@ -57,7 +57,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_20_234837) do
     t.decimal "amount", precision: 10, scale: 2, null: false
     t.text "description", null: false
     t.bigint "income_source_id", null: false
-    t.date "income_date", null: false
+    t.datetime "income_date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["income_date"], name: "index_incomes_on_income_date"

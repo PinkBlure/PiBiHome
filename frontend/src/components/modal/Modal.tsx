@@ -50,9 +50,9 @@ export const Modal = ({
 
   const sizeClasses = {
     sm: 'max-w-sm',
-    md: 'max-w-md',
-    lg: 'max-w-lg',
-    xl: 'max-w-2xl'
+    md: 'max-w-md min-w-[90vw] md:min-w-[500px]',
+    lg: 'max-w-lg min-w-[90vw] md:min-w-[600px]',
+    xl: 'max-w-2xl min-w-[90vw] md:min-w-[700px]'
   };
 
   return (
