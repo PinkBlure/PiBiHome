@@ -6,6 +6,7 @@ import { App } from './App.tsx'
 import { Home } from './pages/Home'
 import { Categories } from './pages/Categories'
 import { Balance } from './pages/Balance'
+import { MonthlyCategorySummary } from './pages/MonthlyCategorySummary.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')!).render(
           <Route index element={<Home />} />
           <Route path="categories" element={<Categories />} />
           <Route path="balance" element={<Balance />} />
+          <Route path="summary" element={<MonthlyCategorySummary />} />
         </Route>
       </Routes>
     </Router>
