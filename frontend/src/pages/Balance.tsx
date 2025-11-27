@@ -49,22 +49,41 @@ const safeParseNumber = (value: string | number | null | undefined): number => {
 const calculateRunningBalance = (transactions: Transaction[]): number[] => {
   if (transactions.length === 0) return [];
 
-  const chronological = [...transactions].sort((a, b) => {
+  const chronologicalTransactions = [...transactions].sort((a, b) => {
     const dateA = new Date(a.date);
     const dateB = new Date(b.date);
-    return dateA.getTime() - dateB.getTime();
-  }).reverse();
+
+    if (dateA.getTime() !== dateB.getTime()) {
+      return dateA.getTime() - dateB.getTime();
+    }
+
+    if (a.created_at && b.created_at) {
+      return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+    }
+
+    return 0;
+  });
 
   let runningBalance = 0;
-  const balanceMap = new Map();
+  const runningBalances: number[] = [];
 
-  for (const transaction of chronological) {
+  for (const transaction of chronologicalTransactions) {
     if (transaction.type === 'income') {
       runningBalance += transaction.amount;
     } else {
       runningBalance -= transaction.amount;
     }
-    balanceMap.set(transaction.id, runningBalance);
+    runningBalances.push(runningBalance);
+  }
+
+  const reversedBalances = [...runningBalances];
+
+  const balanceMap = new Map();
+
+  let index = 0;
+  for (const transaction of chronologicalTransactions) {
+    balanceMap.set(transaction.id, reversedBalances[index]);
+    index++;
   }
 
   return transactions.map(transaction => balanceMap.get(transaction.id) || 0);
@@ -157,29 +176,13 @@ export const Balance = () => {
     });
 
     const runningBalance = calculateRunningBalance(transactions);
-    const balanceMap = new Map();
-    const chronologicalTransactions = [...transactions].sort((a, b) => {
-      const dateComparison = new Date(a.date).getTime() - new Date(b.date).getTime();
-      if (dateComparison === 0 && a.created_at && b.created_at) {
-        return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-      }
-      return dateComparison;
-    }).reverse();
-
-    for (const [index, transaction] of chronologicalTransactions.entries()) {
-      balanceMap.set(transaction.id, runningBalance[index]);
-    }
-
-    const tableRunningBalance = transactions.map(transaction =>
-      balanceMap.get(transaction.id) || 0
-    );
 
     setBalanceData({
       totalIncome,
       totalExpense,
       balance,
       transactions,
-      runningBalance: tableRunningBalance
+      runningBalance: runningBalance
     });
 
   } catch (err) {
