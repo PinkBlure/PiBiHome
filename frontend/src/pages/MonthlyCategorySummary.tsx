@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useCategorySummary } from '../hooks/useCategorySummary';
-import { CategorySummaryCard  } from '../components/list/summary/CategorySummaryCard';
+import { CategorySummaryCard } from '../components/list/summary/CategorySummaryCard';
+import { CategoryTypeSummary } from '../components/list/summary/CategoryTypeSummary';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 
@@ -16,7 +17,7 @@ export const MonthlyCategorySummary: React.FC<MonthlyCategorySummaryProps> = ({
   const [selectedMonth, setSelectedMonth] = useState<number>(initialMonth || new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState<number>(initialYear || new Date().getFullYear());
 
-  const { summary, loading, error, totalMonthly } = useCategorySummary(selectedMonth, selectedYear);
+  const { summary, categoryTypeSummary, loading, error, totalMonthly } = useCategorySummary(selectedMonth, selectedYear);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('es-ES', {
@@ -107,26 +108,37 @@ export const MonthlyCategorySummary: React.FC<MonthlyCategorySummaryProps> = ({
         </div>
       </div>
 
-      {summary.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {summary.map(categorySummary => (
-            <CategorySummaryCard
-              key={categorySummary.category_id}
-              categorySummary={categorySummary}
-              totalMonthly={totalMonthly}
-              formatCurrency={formatCurrency}
-            />
-          ))}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1">
+          <CategoryTypeSummary
+            typeSummary={categoryTypeSummary}
+            formatCurrency={formatCurrency}
+          />
         </div>
-      ) : (
-        <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
-          <i className="fas fa-inbox text-4xl text-gray-300 mb-4"></i>
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">No hay gastos registrados</h3>
-          <p className="text-gray-500 max-w-sm mx-auto">
-            No se encontraron gastos para {months[selectedMonth - 1]} de {selectedYear}
-          </p>
+
+        <div className="lg:col-span-2">
+          {summary.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {summary.map(categorySummary => (
+                <CategorySummaryCard
+                  key={categorySummary.category_id}
+                  categorySummary={categorySummary}
+                  totalMonthly={totalMonthly}
+                  formatCurrency={formatCurrency}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
+              <i className="fas fa-inbox text-4xl text-gray-300 mb-4"></i>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">No hay gastos registrados</h3>
+              <p className="text-gray-500 max-w-sm mx-auto">
+                No se encontraron gastos para {months[selectedMonth - 1]} de {selectedYear}
+              </p>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

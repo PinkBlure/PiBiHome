@@ -1,11 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
 import { categorySummaryService } from '../services/categorySummaryService';
+import type { CategorySummary, CategoryTypeSummary } from '../types/categorySummary';
 import type { Category } from '../services/categoryService';
-import type { CategorySummary } from '../types/categorySummary';
 import { categoryService } from '../services/categoryService';
 
-export const useCategorySummary = (month?: number, year?: number) => {
+interface UseCategorySummaryReturn {
+  summary: CategorySummary[];
+  categoryTypeSummary: CategoryTypeSummary[];
+  categories: Category[];
+  loading: boolean;
+  error: string | null;
+  totalMonthly: number;
+}
+
+export const useCategorySummary = (month?: number, year?: number): UseCategorySummaryReturn => {
   const [summary, setSummary] = useState<CategorySummary[]>([]);
+  const [categoryTypeSummary, setCategoryTypeSummary] = useState<CategoryTypeSummary[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -16,16 +26,15 @@ export const useCategorySummary = (month?: number, year?: number) => {
       setLoading(true);
       setError(null);
 
-      const [categoriesData, summaryData] = await Promise.all([
+      const [categoriesData, completeSummary] = await Promise.all([
         categoryService.getAll(),
-        categorySummaryService.getMonthlySummary(month, year)
+        categorySummaryService.getCompleteMonthlySummary(month, year)
       ]);
 
       setCategories(categoriesData);
-      setSummary(summaryData);
-
-      const total = summaryData.reduce((sum, item) => sum + item.total_amount, 0);
-      setTotalMonthly(total);
+      setSummary(completeSummary.categorySummary);
+      setCategoryTypeSummary(completeSummary.categoryTypeSummary);
+      setTotalMonthly(completeSummary.totalMonthly);
 
     } catch (err) {
       setError('Error al cargar el resumen por categoría');
@@ -39,14 +48,12 @@ export const useCategorySummary = (month?: number, year?: number) => {
     loadData();
   }, [loadData]);
 
-  const refetch = () => loadData();
-
   return {
     summary,
+    categoryTypeSummary,
     categories,
     loading,
     error,
     totalMonthly,
-    refetch
   };
 };
